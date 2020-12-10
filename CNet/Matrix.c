@@ -36,6 +36,15 @@ void add(Matrix* a, Matrix* b, Matrix* c) {
 	}
 }
 
+void addVec(Matrix* a, double* b) {
+	for (int i = 0; i < a->row; i++) {
+		for (int j = 0; j < a->column; j++) {
+			a->value[i * a->column + j] += b[j];
+		}
+	}
+}
+
+
 void sigmoid(Matrix* pointer){
 	for (int i = 0; i < pointer->row * pointer->column; i++) {
 		(*pointer).value[i] = 1 / (1 + exp(pointer->value[i]));
@@ -48,6 +57,16 @@ void relu(Matrix* pointer) {
 			pointer->value[i] = 0;
 	}
 	
+}
+
+void selu(Matrix* pointer) {
+	double alpha = 1.6732632423543772848170429916717;
+	double scale = 1.0507009873554804934193349852946;
+	for (int i = 0; i < pointer->row * pointer->column; i++) {
+		if (pointer->value[i] >= 0)
+			pointer->value[i] *= scale;
+		else pointer->value[i] = scale * alpha * (exp(pointer->value[i]) - 1);
+	}
 }
 
 void maxIndex(Matrix* myMatrix, int* result) {
@@ -109,37 +128,16 @@ void transpose(Matrix* myMatrix) {
 	free(trans);
 }
 
-void batchNormOnCol(Matrix* myMatrix,double gamma,double beta) {
-	double* average = (double*)calloc(myMatrix->row, sizeof(double));
-	double* std = (double*)calloc(myMatrix->row, sizeof(double));
-	if (average != NULL && std!=NULL) {
-		for (int i = 0; i < myMatrix->row; i++) {
-			double sum = 0.0;
-			for (int j = 0; j < myMatrix->column; j++) {
-				sum += myMatrix->value[i * myMatrix->column + j];
-			}
-			average[i] = sum / myMatrix->column;
-		}
-		
-		for (int i = 0; i < myMatrix->row; i++) {
-			double sum = 0.0;
-			for (int j = 0; j < myMatrix->column; j++) {
-				sum += pow(myMatrix->value[i * myMatrix->column + j] - average[i],2);
-			}
-			std[i] = sqrt(sum / myMatrix->column);
-		}
-		for (int i = 0; i < myMatrix->row; i++) {
-			for (int j = 0; j < myMatrix->column; j++) {
-				myMatrix->value[i * myMatrix->column + j] -= average[i];
-				myMatrix->value[i * myMatrix->column + j] /= std[i];
-				myMatrix->value[i * myMatrix->column + j] = gamma * myMatrix->value[i * myMatrix->column + j] + beta;
-			}
+void batchNorm(Matrix* myMatrix,double* mean,double* var,double gamma,double beta) {
+	for (int i = 0; i < myMatrix->row; i++) {
+		for (int j = 0; j < myMatrix->column; j++) {
+			myMatrix->value[i * myMatrix->column + j] -= mean[j];
+			myMatrix->value[i * myMatrix->column + j] /= var[j];
+			myMatrix->value[i * myMatrix->column + j] = gamma * myMatrix->value[i * myMatrix->column + j] + beta;
 		}
 	}
-	free(average);
-	free(std);
 }
-
+/*
 void batchNormOnRow(Matrix* myMatrix, double gamma, double beta) {
 	double* average = (double*)calloc(myMatrix->column, sizeof(double));
 	double* std = (double*)calloc(myMatrix->column, sizeof(double));
@@ -169,3 +167,4 @@ void batchNormOnRow(Matrix* myMatrix, double gamma, double beta) {
 	free(average);
 	free(std);
 }
+*/

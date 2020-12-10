@@ -139,19 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Data.c" />
     <ClCompile Include="Matrix.c" />
     <ClCompile Include="Net.c" />
     <ClCompile Include="Test.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Data.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Net.h" />
+    <ClInclude Include="weights.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
-    <Text Include="TestData.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,6 +20,7 @@
  */
 
 #include "Net.h"
+#include "weights.h"
 
 void netCalculate(double input[][DATA_DIMENSION],int* result) {
 
@@ -37,40 +38,43 @@ void netCalculate(double input[][DATA_DIMENSION],int* result) {
 
 	Matrix in;
 	initialize(&in, DATA_BATCH, DATA_DIMENSION, inputOneDim);
-	transpose(&in);
+	//transpose(&in);
 	//show(&in);
 	Matrix affine1;
-	initialize(&affine1, FIRST_LAYER_ROW, FIRST_LAYER_COLUMN, firstLayer);
+	initialize(&affine1, FIRST_LAYER_ROW, FIRST_LAYER_COLUMN, w_1);
 	//show(&affine1);
 	Matrix affine2;
-	initialize(&affine2, SECOND_LAYER_ROW, SECOND_LAYER_COLUMN, secondLayer);
+	initialize(&affine2, SECOND_LAYER_ROW, SECOND_LAYER_COLUMN, w_2);
 	//show(&affine2);
 	Matrix affine3;
-	initialize(&affine3, THIRD_LAYER_ROW, THIRD_LAYER_COLUMN, thirdLayer);
+	initialize(&affine3, THIRD_LAYER_ROW, THIRD_LAYER_COLUMN, w_3);
 	//show(&affine3);
 	
-	addDim(&in);
 	Matrix affine1Out;
-	double* affine1OutValue = (double*)calloc(affine1.row * in.column, sizeof(double));
-	initialize(&affine1Out, affine1.row, in.column, affine1OutValue);
-	multiply(&affine1, &in, &affine1Out);
-	sigmoid(&affine1Out);
+	double* affine1OutValue = (double*)calloc(in.row * affine1.column, sizeof(double));
+	initialize(&affine1Out, in.row, affine1.column, affine1OutValue);
+	multiply(&in, &affine1,  &affine1Out);
+	addVec(&affine1Out, b_1);
+	selu(&affine1Out);
+	//sigmoid(&affine1Out);
 	//show(&affine1Out);
 	
-	addDim(&affine1Out);
 	Matrix affine2Out;
-	double* affine2OutValue = (double*)calloc(affine2.row * affine1Out.column, sizeof(double));
-	initialize(&affine2Out, affine2.row, affine1Out.column, affine2OutValue);
-	multiply(&affine2, &affine1Out, &affine2Out);
-	sigmoid(&affine2Out);
+	double* affine2OutValue = (double*)calloc(affine1Out.row * affine2.column, sizeof(double));
+	initialize(&affine2Out, affine1Out.row, affine2.column, affine2OutValue);
+	multiply(&affine1Out, &affine2, &affine2Out);
+	addVec(&affine2Out, b_2);
+	selu(&affine2Out);
+	//sigmoid(&affine2Out);
 	//show(&affine2Out);
 
-	addDim(&affine2Out);
 	Matrix affine3Out;
-	double* affine3OutValue = (double*)calloc(affine3.row * affine2Out.column, sizeof(double));
-	initialize(&affine3Out, affine3.row, affine2Out.column, affine3OutValue);
-	multiply(&affine3, &affine2Out, &affine3Out);
-	sigmoid(&affine3Out);
+	double* affine3OutValue = (double*)calloc(affine2Out.row * affine3.column, sizeof(double));
+	initialize(&affine3Out, affine2Out.row, affine3.column, affine3OutValue);
+	multiply(&affine2Out, &affine3, &affine3Out);
+	addVec(&affine3Out, b_3);
+	selu(&affine3Out);
+	//sigmoid(&affine3Out);
 	//show(&affine3Out);
 
 	maxIndex(&affine3Out, result);

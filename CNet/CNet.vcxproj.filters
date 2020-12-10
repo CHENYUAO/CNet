@@ -24,9 +24,6 @@
     <ClCompile Include="Test.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Data.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matrix.h">
@@ -35,14 +32,11 @@
     <ClInclude Include="Net.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Data.h">
+    <ClInclude Include="weights.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TestData.txt">
-      <Filter>资源文件</Filter>
-    </Text>
     <Text Include="ReadMe.txt">
       <Filter>资源文件</Filter>
     </Text>

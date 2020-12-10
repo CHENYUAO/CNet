@@ -61,7 +61,7 @@ void add(Matrix* a, Matrix* b, Matrix* c);
  */
 void addDim(Matrix* myMatrix);
 
-
+void addVec(Matrix* a, double* b);
 
 /* 函数名称：show
  * 函数参数：Matrix myMatrix
@@ -77,6 +77,7 @@ void sigmoid(Matrix* pointer);
 //relu激活函数
 void relu(Matrix* pointer);     
 
+void selu(Matrix* pointer);
 
 /* 函数名称：maxIndex
  * 函数参数：Matrix* myMatrix
@@ -100,6 +101,4 @@ void transpose(Matrix* myMatrix);
  * 对矩阵进行batch normalization处理
  * 
  */
-void batchNormOnCol(Matrix* myMatrix, double gamma, double beta);
-
-void batchNormOnRow(Matrix* myMatrix, double gamma, double beta);
+void batchNorm(Matrix* myMatrix, double* mean, double* var, double gamma, double beta);
