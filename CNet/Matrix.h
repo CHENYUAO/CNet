@@ -101,4 +101,4 @@ void transpose(Matrix* myMatrix);
  * 对矩阵进行batch normalization处理
  * 
  */
-void batchNorm(Matrix* myMatrix, double* mean, double* var, double gamma, double beta);
+void batchNorm(Matrix* myMatrix, double* mean, double* var, double* gamma, double* beta);

@@ -38,18 +38,16 @@ void netCalculate(double input[][DATA_DIMENSION],int* result) {
 
 	Matrix in;
 	initialize(&in, DATA_BATCH, DATA_DIMENSION, inputOneDim);
-	//transpose(&in);
-	//show(&in);
 	Matrix affine1;
 	initialize(&affine1, FIRST_LAYER_ROW, FIRST_LAYER_COLUMN, w_1);
-	//show(&affine1);
 	Matrix affine2;
 	initialize(&affine2, SECOND_LAYER_ROW, SECOND_LAYER_COLUMN, w_2);
 	//show(&affine2);
 	Matrix affine3;
 	initialize(&affine3, THIRD_LAYER_ROW, THIRD_LAYER_COLUMN, w_3);
 	//show(&affine3);
-	
+
+	batchNorm(&in, mean_1, var_1, 1.0, 0.0);
 	Matrix affine1Out;
 	double* affine1OutValue = (double*)calloc(in.row * affine1.column, sizeof(double));
 	initialize(&affine1Out, in.row, affine1.column, affine1OutValue);
@@ -58,7 +56,8 @@ void netCalculate(double input[][DATA_DIMENSION],int* result) {
 	selu(&affine1Out);
 	//sigmoid(&affine1Out);
 	//show(&affine1Out);
-	
+
+	batchNorm(&affine1Out, mean_2, var_2, 1.0, 0.0);
 	Matrix affine2Out;
 	double* affine2OutValue = (double*)calloc(affine1Out.row * affine2.column, sizeof(double));
 	initialize(&affine2Out, affine1Out.row, affine2.column, affine2OutValue);
@@ -68,12 +67,13 @@ void netCalculate(double input[][DATA_DIMENSION],int* result) {
 	//sigmoid(&affine2Out);
 	//show(&affine2Out);
 
+	batchNorm(&affine2Out, mean_3, var_3, 1.0, 0.0);
 	Matrix affine3Out;
 	double* affine3OutValue = (double*)calloc(affine2Out.row * affine3.column, sizeof(double));
 	initialize(&affine3Out, affine2Out.row, affine3.column, affine3OutValue);
 	multiply(&affine2Out, &affine3, &affine3Out);
 	addVec(&affine3Out, b_3);
-	selu(&affine3Out);
+	//selu(&affine3Out);
 	//sigmoid(&affine3Out);
 	//show(&affine3Out);
 

@@ -128,12 +128,12 @@ void transpose(Matrix* myMatrix) {
 	free(trans);
 }
 
-void batchNorm(Matrix* myMatrix,double* mean,double* var,double gamma,double beta) {
+void batchNorm(Matrix* myMatrix,double* mean,double* var,double* gamma,double* beta) {
 	for (int i = 0; i < myMatrix->row; i++) {
 		for (int j = 0; j < myMatrix->column; j++) {
 			myMatrix->value[i * myMatrix->column + j] -= mean[j];
 			myMatrix->value[i * myMatrix->column + j] /= var[j];
-			myMatrix->value[i * myMatrix->column + j] = gamma * myMatrix->value[i * myMatrix->column + j] + beta;
+			myMatrix->value[i * myMatrix->column + j] = gamma[j] * myMatrix->value[i * myMatrix->column + j] + beta[j];
 		}
 	}
 }
